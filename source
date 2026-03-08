@@ -6948,68 +6948,104 @@ end)
 
 if isDeveloperMode then
 addcmd('escapeexecenvironment', {'escapeexecenv'}, function(args, speaker)
-function getlc()
-t={}
-for i,v in pairs(game.Players.LocalPlayer:GetDescendants()) do
-if v:IsA'LocalScript' then
-table.insert(t,v)
-end
-end
-for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-if v:IsA'LocalScript' then
-table.insert(t,v)
-end
-end
-return t
-end
-function getalllsenv()
-pigeonpiano={}
-for i,v in pairs(getlc()) do
-pcall(function()
-table.insert(pigeonpiano,getsenv(v))
-end)
-end
-return pigeonpiano
-end
-getgenv().execute=function(x) s=true func=x end
-for i,v in pairs(getalllsenv()) do
-for z,y in pairs(v) do
-if type(y)=='function' then
-v[z]=function(...)
-task.spawn(function()
-if s==true then s=false task.spawn(function() setidentity(8) func() end) end
-end)
-return y(...) end
-end
-end
-end
-game.DescendantAdded:Connect(function(x)
-wait()
-if x.ClassName=='LocalScript' then
-wait()
-env=getsenv(x)
-if not env then return end
-for i,v in pairs(env) do
-if type(v)=='function' then
-getsenv(x)[i]=function(...)
-task.spawn(function()
-if s==true then
-s=false
-task.spawn(function()
-setidentity(8)
-func()
-end)
-end
-end)
-return v(...) end
-end
-end
-end
-end)
-getgenv().v00ccx={loaded=true}
-end)
-end
 
+    local s = false
+    local func
+
+    local function getlc()
+        local t = {}
+
+        for _,v in pairs(game.Players.LocalPlayer:GetDescendants()) do
+            if v:IsA("LocalScript") then
+                table.insert(t, v)
+            end
+        end
+
+        if game.Players.LocalPlayer.Character then
+            for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                if v:IsA("LocalScript") then
+                    table.insert(t, v)
+                end
+            end
+        end
+
+        return t
+    end
+
+    local function getalllsenv()
+        local pigeonpiano = {}
+
+        for _,v in pairs(getlc()) do
+            pcall(function()
+                table.insert(pigeonpiano, getsenv(v))
+            end)
+        end
+
+        return pigeonpiano
+    end
+
+    getgenv().execute = function(x)
+        s = true
+        func = x
+    end
+
+    for _,env in pairs(getalllsenv()) do
+        for name,val in pairs(env) do
+            if type(val) == "function" then
+                env[name] = function(...)
+                    local args = {...}
+
+                    task.spawn(function()
+                        if s then
+                            s = false
+                            task.spawn(function()
+                                setidentity(8)
+                                func()
+                            end)
+                        end
+                    end)
+
+                    return val(table.unpack(args))
+                end
+            end
+        end
+    end
+
+    game.DescendantAdded:Connect(function(x)
+        task.wait()
+
+        if x:IsA("LocalScript") then
+            task.wait()
+
+            local env = getsenv(x)
+            if not env then return end
+
+            for name,val in pairs(env) do
+                if type(val) == "function" then
+                    env[name] = function(...)
+                        local args = {...}
+
+                        task.spawn(function()
+                            if s then
+                                s = false
+                                task.spawn(function()
+                                    setidentity(8)
+                                    func()
+                                end)
+                            end
+                        end)
+
+                        return val(table.unpack(args))
+                    end
+                end
+            end
+        end
+    end)
+
+    getgenv().v00ccx = {loaded = true}
+
+end)
+end
 addcmd('movementpredictor', {'mpredictor'}, function(args, speaker)
 local v2 = Vector2.new
 local v3 = Vector3.new
