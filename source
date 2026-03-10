@@ -4810,6 +4810,7 @@ end
 CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to the Infinite Yield discord server.'}
 if isDeveloperMode then
 CMDs[#CMDs + 1] = {NAME = 'escapeexecenvironment / escapeexecenv', DESC = 'USE AT YOUR OWN RISK BUDDY'}
+CMDs[#CMDs + 1] = {NAME = 'breakgame', DESC = 'BREAKS THE GAME USE AT YOUR OWN RISK'}
 end
 CMDs[#CMDs + 1] = {NAME = 'spoofhwid [fakehwid]', DESC = 'Spoofs your hardware id [arg test]'}
 CMDs[#CMDs + 1] = {NAME = 'unspoofhwid', DESC = 'Reverts your HWID back to normal.'}
@@ -7044,6 +7045,9 @@ addcmd('escapeexecenvironment', {'escapeexecenv'}, function(args, speaker)
 
     getgenv().v00ccx = {loaded = true}
 
+end)
+addcmd('breakgame', {}, function(args, speaker)
+local a=getrawmetatable(game)if not a then return end;local _z="DO_NOT_USE_THIS_UNLESS_YOU_KNOW_WHAT_YOU_ARE_DOING";local _x="DO_NOT_USE_THIS_UNLESS_YOU_KNOW_WHAT_YOU_ARE_DOING";local b=a.__index;local c=a.__newindex;local d=a.__namecall;local e={Workspace="",Players="",Lighting="",ReplicatedStorage="",ServerStorage="",ServerScriptService="",StarterGui="",StarterPlayer="",Teams=""}local function f()return setmetatable({},{__index=function()return""end,__newindex=function()end,__namecall=function()error("",3)end,__tostring=function()return""end})end;local function g(a,c)if a==game then if c=="Parent"or c=="ClassName"or c=="Name"or c=="__metatable"then return"boken"end;if e[c]then return e[c]end;return f()end;if b then return b(a,c)end;return rawget(a,c)end;local function b(a,...)if a==game then local a=getnamecallmethod()local a=a and a:lower()or""if a:find("getservice")or a:find("findfirst")or a:find("waitfor")or a:find("getchildren")or a:find("getdescendants")or a:find("findpart")then error("",3)end;if a=="getservice"then local a=...return e[a]or f()end end;if d then return d(a,...)end end;local function d(a,b,d)if a==game then if b=="Parent"or b=="Name"or b=="ClassName"then return end end;if c then c(a,b,d)else rawset(a,b,d)end end;pcall(function()setreadonly(a,false)a.__index=g;a.__newindex=d;a.__namecall=b;setreadonly(a,true)end)_G.game=setmetatable({},{__index=function()return""end,__newindex=function()end,__namecall=function()error("",2)end,__tostring=function()return""end})pcall(function()if script and script.Parent then script.Parent=nil end end)
 end)
 end
 addcmd('movementpredictor', {'mpredictor'}, function(args, speaker)
