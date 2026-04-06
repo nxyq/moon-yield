@@ -4840,6 +4840,7 @@ CMDs[#CMDs + 1] = {NAME = 'executor', DESC = 'Opens an internal executor gui by 
 CMDs[#CMDs + 1] = {NAME = 'audiologger / alogger', DESC = 'Opens Edges audio logger'}
 CMDs[#CMDs + 1] = {NAME = 'serverinfo / info', DESC = 'Gives you info about the server'}
 CMDs[#CMDs + 1] = {NAME = 'jobid', DESC = 'Copies the games JobId to your clipboard'}
+CMDs[#CMDs + 1] = {NAME = 'tweentptool', DESC = 'Basically like tptool but it tweens you.'}
 CMDs[#CMDs + 1] = {NAME = 'notifyjobid', DESC = 'Notifies you the games JobId'}
 CMDs[#CMDs + 1] = {NAME = 'rejoin / rj', DESC = 'Makes you rejoin the game'}
 CMDs[#CMDs + 1] = {NAME = 'autorejoin / autorj', DESC = 'Automatically rejoins the server if you get kicked/disconnected'}
@@ -8032,6 +8033,36 @@ end)
 
 addcmd('gametp',{'gameteleport'},function(args, speaker)
 	TeleportService:Teleport(args[1])
+end)
+
+addcmd('tweentptool',{},function(args, speaker)
+	 local tool = Instance.new("Tool")
+ tool.RequiresHandle = false
+ tool.Name = "Tween TP Tool"
+ local function onActivated()
+	 local mouse = game.Players.LocalPlayer:GetMouse()
+	 local pos = mouse.Hit + Vector3.new(0,2.5,0)
+	 local humanoidRootPart = Players.LocalPlayer.Character.HumanoidRootPart
+ 
+	 local tweenInfo = TweenInfo.new(
+		 1,
+		 Enum.EasingStyle.Quad,
+		 Enum.EasingDirection.Out,
+		 0,
+		 false,
+		 0
+	 )
+ 
+	 local tween = TweenService:Create(humanoidRootPart, tweenInfo, {
+		 CFrame = CFrame.new(pos.X, pos.Y, pos.Z)
+	 })
+ 
+	 tween:Play()
+ end
+ 
+ tool.Activated:Connect(onActivated)
+ tool.Parent = Players.LocalPlayer.Backpack
+					 end)
 end)
 
 addcmd("rejoin", {"rj"}, function(args, speaker)
